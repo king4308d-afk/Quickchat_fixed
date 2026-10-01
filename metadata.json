@@ -1,0 +1,9 @@
+{
+  "name": "QuickChat - Random Video & Direct Chat",
+  "description": "QuickChat random video matching and instant direct messaging app featuring live camera streaming, real-time peer connection, and chat.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

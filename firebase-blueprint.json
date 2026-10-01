@@ -1,0 +1,125 @@
+{
+  "entities": {
+    "user": {
+      "title": "User Profile",
+      "description": "User profile with authentication and wallet status",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "Unique identifier for user" },
+        "name": { "type": "string", "description": "Display name of user" },
+        "email": { "type": "string", "description": "User email address" },
+        "avatar": { "type": "string", "description": "Profile picture URL" },
+        "gender": { "type": "string", "enum": ["male", "female"], "description": "User gender" },
+        "coins": { "type": "number", "description": "User coin balance" },
+        "dailySpinsLeft": { "type": "number", "description": "Daily spins left today" },
+        "femalePassActive": { "type": "boolean", "description": "Female filter pass status" },
+        "remainingPassCalls": { "type": "number", "description": "Remaining calls on pass" },
+        "passExpiryTimestamp": { "type": "number", "description": "Pass expiration timestamp" },
+        "updatedAt": { "type": "number", "description": "Last update timestamp" }
+      },
+      "required": ["userId", "name"]
+    },
+    "chatRoom": {
+      "title": "Chat Room",
+      "description": "Direct chat room between two users",
+      "type": "object",
+      "properties": {
+        "roomId": { "type": "string", "description": "Unique room identifier" },
+        "participants": { "type": "array", "description": "Array of user IDs participating in the room" },
+        "lastMessage": { "type": "object", "description": "Last message sent in this room" },
+        "updatedAt": { "type": "number", "description": "Last activity timestamp" }
+      },
+      "required": ["roomId", "participants"]
+    },
+    "chatMessage": {
+      "title": "Chat Message",
+      "description": "Real-time message record in a chat room subcollection",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Message unique ID" },
+        "senderId": { "type": "string", "description": "Sender user ID" },
+        "senderName": { "type": "string", "description": "Sender display name" },
+        "recipientId": { "type": "string", "description": "Recipient user ID" },
+        "text": { "type": "string", "description": "Text message content" },
+        "mediaType": { "type": "string", "enum": ["image", "video"], "description": "Optional media type" },
+        "mediaUrl": { "type": "string", "description": "Optional media attachment URL" },
+        "timestamp": { "type": "number", "description": "Message timestamp" },
+        "chatRoomId": { "type": "string", "description": "Chat room identifier" }
+      },
+      "required": ["id", "senderId", "recipientId", "text", "timestamp"]
+    },
+    "waitingUser": {
+      "title": "Waiting User",
+      "description": "User currently queued for video matchmaking",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "User ID" },
+        "name": { "type": "string", "description": "User name" },
+        "gender": { "type": "string", "enum": ["male", "female"], "description": "User gender" },
+        "genderFilter": { "type": "string", "enum": ["male", "female", "both"], "description": "Preferred partner gender" },
+        "status": { "type": "string", "enum": ["waiting", "matched"], "description": "Matchmaking status" },
+        "createdAt": { "type": "number", "description": "Queue entry timestamp" }
+      },
+      "required": ["userId", "name", "gender", "status", "createdAt"]
+    },
+    "callRoom": {
+      "title": "Call Room",
+      "description": "Active video call session record",
+      "type": "object",
+      "properties": {
+        "callRoomId": { "type": "string", "description": "Room ID" },
+        "agoraChannel": { "type": "string", "description": "Agora Channel Name" },
+        "participants": { "type": "array", "description": "List of participant user IDs" },
+        "status": { "type": "string", "enum": ["active", "ended"], "description": "Call status" },
+        "createdAt": { "type": "number", "description": "Room creation timestamp" }
+      },
+      "required": ["callRoomId", "agoraChannel", "participants", "status", "createdAt"]
+    },
+    "userInbox": {
+      "title": "User Inbox",
+      "description": "Notification document for user incoming messages",
+      "type": "object",
+      "properties": {
+        "recipientId": { "type": "string", "description": "Recipient user ID" },
+        "lastMessage": { "type": "object", "description": "Last incoming message" },
+        "chatRoomId": { "type": "string", "description": "Chat room ID" },
+        "updatedAt": { "type": "number", "description": "Last notification timestamp" }
+      },
+      "required": ["recipientId", "lastMessage", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "user",
+      "description": "Public user profile and account state"
+    },
+    "/chat_rooms/{roomId}": {
+      "schema": "chatRoom",
+      "description": "Direct chat room metadata"
+    },
+    "/chat_rooms/{roomId}/messages/{messageId}": {
+      "schema": "chatMessage",
+      "description": "Messages sent within a chat room"
+    },
+    "/chats/{roomId}": {
+      "schema": "chatRoom",
+      "description": "Direct chats document"
+    },
+    "/chats/{roomId}/messages/{messageId}": {
+      "schema": "chatMessage",
+      "description": "Direct chat messages ordered by timestamp"
+    },
+    "/waiting_users/{userId}": {
+      "schema": "waitingUser",
+      "description": "Active matchmaking waiting queue entries"
+    },
+    "/call_rooms/{roomId}": {
+      "schema": "callRoom",
+      "description": "Active and past video call rooms"
+    },
+    "/user_inbox/{userId}": {
+      "schema": "userInbox",
+      "description": "User notification inbox"
+    }
+  }
+}
