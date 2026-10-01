@@ -2,7 +2,7 @@ import { initializeApp, getApps, getApp, type FirebaseApp } from 'firebase/app';
 import { getFirestore, type Firestore, doc, getDocFromServer } from 'firebase/firestore';
 import { getAuth, GoogleAuthProvider, type Auth } from 'firebase/auth';
 
-import configJson from '../../firebase-applet-config.json';
+
 
 /**
  * Exact Firebase Project Configuration:
@@ -17,8 +17,7 @@ export const firebaseConfig = {
   appId: "1:1081306187761:web:8bcfcb6b3686f156736650",
   measurementId: "G-5YZ6EFDQ2V"
 };
-
-export const FIRESTORE_DATABASE_ID = configJson.firestoreDatabaseId || "(default)";
+export const FIRESTORE_DATABASE_ID = "(default)";
 
 export function getFirebaseApp(): FirebaseApp {
   if (getApps().length > 0) {
